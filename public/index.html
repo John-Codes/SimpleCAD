@@ -11,7 +11,57 @@
 <body data-mode="3d">
   <div class="container">
     <div class="sidebar">
-      <button id="mode-toggle-btn">Sketch</button>
+      <!-- Sketch Section -->
+      <div class="sidebar-section" data-visibility="3d">
+        <button id="sketch-btn" class="btn-primary">Sketch</button>
+      </div>
+
+      <!-- Object List Section -->
+      <div class="sidebar-section" data-visibility="3d">
+        <h3>Objects</h3>
+        <ul id="object-list" class="object-list">
+          <!-- Objects will be dynamically added here -->
+        </ul>
+      </div>
+
+      <!-- Extrude Section -->
+      <div class="sidebar-section" data-visibility="3d-selection">
+        <button id="extrude-btn" class="btn-tool">Extrude</button>
+      </div>
+
+      <!-- Tools Section -->
+      <div class="sidebar-section" data-visibility="2d">
+        <h3>Tools</h3>
+        <div class="tool-grid">
+          <button id="line-tool-btn" class="btn-tool">Line Tool</button>
+          <button id="finish-sketch-btn" class="btn-secondary">Finish Sketch</button>
+        </div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="sidebar-section">
+        <h3>Settings</h3>
+        <div class="settings-grid">
+          <label for="snap-distance">Snap Distance</label>
+          <input type="number" id="snap-distance" value="1">
+          <label for="construction-distance">Construction Distance</label>
+          <input type="number" id="construction-distance" value="10">
+        </div>
+      </div>
+
+      <!-- View Section -->
+      <div class="sidebar-section">
+        <h3>View</h3>
+        <button id="reset-view-btn" class="btn-secondary">Reset View</button>
+      </div>
+
+      <!-- Information Section -->
+      <div class="sidebar-section">
+        <h3>Information</h3>
+        <p class="info-text">
+          <a href="https://www.youtube.com" target="_blank">Help Videos</a>
+        </p>
+      </div>
     </div>
     <div class="viewport">
       <canvas id="canvas2d"></canvas>

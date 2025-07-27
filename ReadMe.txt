@@ -36,10 +36,14 @@ Implement an object list displaying each object’s name, and color indicator, s
 Add extrude (#2196f3)  button will be visible only when an object is selected with a mouse click on one of the objects faces in 3d mode not in 2d sketch mode. Can extrude positively or negatively removing material.
 Create a "Tools" section (hidden by default) with a "Line Tool" button (#64b5f6) and "Finish Sketch" button, styled with rgba(100, 181, 246, 0.1), rounded corners (8px), and hover effects. Only visible in 2d mode.
 Add a "Settings" section with inputs for snap distance, construction distance, and styled with rgba(255, 255, 255, 0.1), white text, and focus state (#64b5f6 glow).
-Add a "View" section with "Reset View" and "Toggle 2D/3D" buttons.
+Add a "View" section with "Reset View".
 Add an "Information" section for contextual help text (11px, #90a4ae).
-
-
+The default snap distance for the grid should be 1mm.
+In the information part just put a link to YT.
+Create a 3d cube 20mm x 20mmm x 20mmm to test the move object and rotate object and selected face in  3d mode. So when a face is selected the sketch buttopn appears and then we can implement the sketch functionality
+The data for the items list should have the color name and have the actual object in 2d or 3d when  a sketch operation is performed on the object it should be saved on the list or when a extrude operation is performed it should be saved on the list by creating a new copy of the item with the operation be it extrusion or sketch one operation per copy. 
+The 3d mode should be like a regular cad 3d view a X plane grid colored red.  a Z Plane grid colored green for front and back. and a Y colored blue for up and down.
+and when a face is selected you must higlit it when it is clicked on by the user in 3d mode.
 
 Task 4: Implement 2D Canvas and Grid
 
