@@ -44,6 +44,12 @@ Create a 3d cube 20mm x 20mmm x 20mmm to test the move object and rotate object 
 The data for the items list should have the color name and have the actual object in 2d or 3d when  a sketch operation is performed on the object it should be saved on the list or when a extrude operation is performed it should be saved on the list by creating a new copy of the item with the operation be it extrusion or sketch one operation per copy. 
 The 3d mode should be like a regular cad 3d view a X plane grid colored red.  a Z Plane grid colored green for front and back. and a Y colored blue for up and down.
 and when a face is selected you must higlit it when it is clicked on by the user in 3d mode.
+Create a 3d cube 20mm x 20mmm x 20mmm to test the move object and rotate object and selected face in  3d mode. So when a face is selected the sketch buttopn appears and then we can implement the sketch functionality
+The data for the items list should have the color name and have the actual object in 2d or 3d when  a sketch operation is performed on the object it should be saved on the list or when a extrude operation is performed it should be saved on the list by creating a new copy of the item with the operation be it extrusion or sketch one operation per copy. 
+The 3d mode should be like a regular cad 3d view a X plane grid colored red.  a Z Plane grid colored green for front and back. and a Y colored blue for up and down.
+and when a face is selected you must higlit it when it is clicked on by the user in 3d mode.
+Remove the grids below the floor in the Y plane In 3d printing its not possible to print below the print bed so no need for grids below the print bed.
+
 
 Task 4: Implement 2D Canvas and Grid
 

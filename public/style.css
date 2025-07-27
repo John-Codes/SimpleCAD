@@ -158,6 +158,15 @@ body[data-mode="2d"] .sidebar-section[data-visibility="3d"],
   display: none;
 }
 
+#view-cube {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  z-index: 10;
+}
+
 .viewport {
   flex: 1;
   position: relative;
