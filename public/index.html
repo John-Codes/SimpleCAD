@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Minimalist 2D Sketch & Extrusion Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    #container {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      width: 90vw;
+      max-width: 1200px;
+      justify-content: center;
+    }
+    #sketch, #view3d {
+      background: #222546;
+      border-radius: 12px;
+      box-shadow: 0 2px 16px #000a;
+      width: 480px;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      margin-top: 32px;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+  </style>
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <h1>Minimalist 2D Sketch & Extrusion Tool</h1>
+  <div id="container">
+    <div id="sketch">2D Sketch Area</div>
+    <div id="view3d">3D View Area</div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
