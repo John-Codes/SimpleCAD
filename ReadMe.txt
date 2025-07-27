@@ -16,6 +16,7 @@ Task 2: Implement Basic UI Structure
 
 Objective: Create the minimalist UI layout with a sidebar and viewport.
 Steps:
+The default mode for the UI is 3d view mode and select object or face of object for extrusion or sketching. When the sketch button is pressed then we exit 3d mode and go in to 2d sketch mode.
 Structure the HTML with a flex container (.container) for a sidebar (280px) and viewport (flex: 1).
 Style the sidebar with a blurred background (backdrop-filter: blur(10px), rgba(0, 0, 0, 0.3)), border (rgba(255, 255, 255, 0.1)), and padding (20px).
 Style the viewport with a radial gradient (circle at center, #0f3460, #0a1a2a).
@@ -23,7 +24,7 @@ Add a status bar at the bottom of the viewport with a blurred background (backdr
 Add two canvases: one for 2D sketching (canvas2d) and one for 3D rendering (canvas3d, initially hidden and shadow (0 0 30px rgba(0, 0, 0, 0.5)).
 When in 2d mode the 2d canvas appears next to the menu and covers the remaining screen.when in 3d mode the 3d canvas appears next to the menu and covers the remainign screen.By default we start in 2d mode 
 Have a settings button with a settings menu that has a screen that lets you just input your 3d printers build area in X Y Z planes. So what ever is inside this will be a blue grid with dark blue background. what ever is out will be a red grid with dark red background.
-
+The settings button will always be visible in both modes 2d and 3d mode.
 
 Task 3: Implement Sidebar Components
 
