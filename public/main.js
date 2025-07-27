@@ -13,7 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const viewCubeContainer = document.getElementById('view-cube');
 
   let scene, camera, renderer, controls, cube;
-  let viewCubeScene, viewCubeCamera, viewCubeRenderer, viewCube;
+  let viewCubeScene, viewCubeCamera, viewCubeRenderer, viewCube, labelRenderer;
   const objects = [];
   const originalMaterials = [];
   let selectedFaceMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide });
@@ -30,8 +30,14 @@ window.addEventListener('DOMContentLoaded', () => {
     // Grids
     const size = 100;
     const divisions = 10;
-    const gridHelper = new THREE.GridHelper(size, divisions);
+    const gridHelper = new THREE.GridHelper(size, divisions); // Floor grid
     scene.add(gridHelper);
+
+    const verticalGrid = new THREE.GridHelper(size, divisions, 0x0000ff, 0x808080); // Y-plane grid
+    verticalGrid.rotation.x = Math.PI / 2;
+    verticalGrid.position.y = size / 2;
+    verticalGrid.position.z = 0;
+    scene.add(verticalGrid);
 
     // Cube
     const materials = [
@@ -45,6 +51,7 @@ window.addEventListener('DOMContentLoaded', () => {
     materials.forEach(m => originalMaterials.push(m.clone()));
     const geometry = new THREE.BoxGeometry(20, 20, 20);
     cube = new THREE.Mesh(geometry, materials);
+    cube.position.y = 10;
     scene.add(cube);
     objects.push({ name: 'Cube', color: '#00ff00', mesh: cube, version: 1 });
 
@@ -59,13 +66,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function animate() {
     requestAnimationFrame(animate);
+    TWEEN.update();
     controls.update();
+
+    renderer.autoClear = true;
     renderer.render(scene, camera);
 
-    if (viewCubeRenderer) {
-        viewCubeCamera.quaternion.copy(camera.quaternion);
-        viewCubeRenderer.render(viewCubeScene, viewCubeCamera);
-    }
+    renderer.autoClear = false;
+    renderer.clearDepth();
+    viewCubeRenderer.render(viewCubeScene, viewCubeCamera);
   }
 
   function updateObjectList() {
@@ -120,22 +129,74 @@ window.addEventListener('DOMContentLoaded', () => {
     viewCubeRenderer.setSize(viewCubeContainer.clientWidth, viewCubeContainer.clientHeight);
     viewCubeContainer.appendChild(viewCubeRenderer.domElement);
 
-    const viewCubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const createTextTexture = (text) => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = 128;
+        canvas.height = 128;
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.font = 'bold 20px Arial';
+        context.fillStyle = 'black';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(text, canvas.width / 2, canvas.height / 2);
+        return new THREE.CanvasTexture(canvas);
+    };
+
     const faceMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x0000ff }), // Right
-        new THREE.MeshBasicMaterial({ color: 0x0000ff }), // Left
-        new THREE.MeshBasicMaterial({ color: 0x00ff00 }), // Top
-        new THREE.MeshBasicMaterial({ color: 0x00ff00 }), // Bottom
-        new THREE.MeshBasicMaterial({ color: 0xff0000 }), // Front
-        new THREE.MeshBasicMaterial({ color: 0xff0000 })  // Back
+        new THREE.MeshBasicMaterial({ map: createTextTexture('RIGHT') }),
+        new THREE.MeshBasicMaterial({ map: createTextTexture('LEFT') }),
+        new THREE.MeshBasicMaterial({ map: createTextTexture('TOP') }),
+        new THREE.MeshBasicMaterial({ map: createTextTexture('BOTTOM') }),
+        new THREE.MeshBasicMaterial({ map: createTextTexture('FRONT') }),
+        new THREE.MeshBasicMaterial({ map: createTextTexture('BACK') })
     ];
+
+    const viewCubeGeometry = new THREE.BoxGeometry(1, 1, 1);
     viewCube = new THREE.Mesh(viewCubeGeometry, faceMaterials);
     viewCubeScene.add(viewCube);
-    viewCubeCamera.position.z = 2;
+    viewCubeCamera.position.z = 1.5;
 
-    const viewCubeControls = new THREE.OrbitControls(camera, viewCubeRenderer.domElement);
+    const viewCubeControls = new THREE.OrbitControls(viewCubeCamera, viewCubeRenderer.domElement);
     viewCubeControls.enableZoom = false;
     viewCubeControls.enablePan = false;
+
+    viewCubeControls.addEventListener('change', () => {
+        camera.quaternion.copy(viewCubeCamera.quaternion.clone().invert());
+    });
+
+    viewCubeRenderer.domElement.addEventListener('click', (event) => {
+        const rect = viewCubeRenderer.domElement.getBoundingClientRect();
+        const mouse = new THREE.Vector2();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, viewCubeCamera);
+        const intersects = raycaster.intersectObject(viewCube);
+
+        if (intersects.length > 0) {
+            const faceIndex = intersects[0].face.materialIndex;
+            const distance = camera.position.distanceTo(controls.target);
+            const targetPosition = new THREE.Vector3();
+
+            switch (faceIndex) {
+                case 0: targetPosition.set(distance, 0, 0); break; // Right
+                case 1: targetPosition.set(-distance, 0, 0); break; // Left
+                case 2: targetPosition.set(0, distance, 0); break; // Top
+                case 3: targetPosition.set(0, -distance, 0); break; // Bottom
+                case 4: targetPosition.set(0, 0, distance); break; // Front
+                case 5: targetPosition.set(0, 0, -distance); break; // Back
+            }
+
+            new TWEEN.Tween(camera.position)
+                .to(targetPosition, 500)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .onUpdate(() => camera.lookAt(controls.target))
+                .start();
+        }
+    });
   }
 
   canvas3d.addEventListener('click', (event) => {

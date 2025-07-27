@@ -49,6 +49,7 @@ The data for the items list should have the color name and have the actual objec
 The 3d mode should be like a regular cad 3d view a X plane grid colored red.  a Z Plane grid colored green for front and back. and a Y colored blue for up and down.
 and when a face is selected you must higlit it when it is clicked on by the user in 3d mode.
 Remove the grids below the floor in the Y plane In 3d printing its not possible to print below the print bed so no need for grids below the print bed.
+better yet just extend the grids to the 3d printers xyz planes max letgh after that the grid ends.
 
 
 Task 4: Implement 2D Canvas and Grid
