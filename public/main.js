@@ -33,27 +33,32 @@ window.addEventListener('DOMContentLoaded', () => {
     const gridHelper = new THREE.GridHelper(size, divisions); // Floor grid
     scene.add(gridHelper);
 
-    const verticalGrid = new THREE.GridHelper(size, divisions, 0x0000ff, 0x808080); // Y-plane grid
+    const verticalGrid = new THREE.GridHelper(size, 10, 0x808080, 0x808080); // Y-plane grid
     verticalGrid.rotation.x = Math.PI / 2;
     verticalGrid.position.y = size / 2;
     verticalGrid.position.z = 0;
     scene.add(verticalGrid);
 
     // Cube
-    const materials = [
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }),
-        new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }),
-    ];
-    materials.forEach(m => originalMaterials.push(m.clone()));
     const geometry = new THREE.BoxGeometry(20, 20, 20);
+    const material = new THREE.MeshStandardMaterial({
+        color: 0x1a237e,
+        transparent: true,
+        opacity: 0.5,
+        metalness: 0.1,
+        roughness: 0.5
+    });
+    const materials = [material, material, material, material, material, material];
+    materials.forEach(m => originalMaterials.push(m.clone()));
     cube = new THREE.Mesh(geometry, materials);
     cube.position.y = 10;
+
+    const edges = new THREE.EdgesGeometry(geometry);
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 }));
+    cube.add(line);
+
     scene.add(cube);
-    objects.push({ name: 'Cube', color: '#00ff00', mesh: cube, version: 1 });
+    objects.push({ name: 'Cube', color: '#1a237e', mesh: cube, version: 1 });
 
     camera.position.z = 50;
 
@@ -74,7 +79,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     renderer.autoClear = false;
     renderer.clearDepth();
-    viewCubeRenderer.render(viewCubeScene, viewCubeCamera);
+
+    if (viewCubeRenderer) {
+        viewCubeRenderer.render(viewCubeScene, viewCubeCamera);
+    }
   }
 
   function updateObjectList() {
@@ -161,10 +169,6 @@ window.addEventListener('DOMContentLoaded', () => {
     const viewCubeControls = new THREE.OrbitControls(viewCubeCamera, viewCubeRenderer.domElement);
     viewCubeControls.enableZoom = false;
     viewCubeControls.enablePan = false;
-
-    viewCubeControls.addEventListener('change', () => {
-        camera.quaternion.copy(viewCubeCamera.quaternion.clone().invert());
-    });
 
     viewCubeRenderer.domElement.addEventListener('click', (event) => {
         const rect = viewCubeRenderer.domElement.getBoundingClientRect();
